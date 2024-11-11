@@ -34,7 +34,6 @@ defmodule Beamstagram.MixProject do
     [
       {:phoenix, "~> 1.7.11"},
       {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -75,17 +74,37 @@ defmodule Beamstagram.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind beamstagram", "esbuild beamstagram"],
+      setup: ["deps.get", "assets.setup", "assets.build"],
+      "assets.setup": [
+        "tailwind.install --if-missing",
+        "esbuild.install --if-missing",
+        "beamstagram.install_wasm"
+      ],
+      "assets.build": ["tailwind beamstagram", "esbuild beamstagram", "beamstagram.deploy_wasm"],
       "assets.deploy": [
         "tailwind beamstagram --minify",
         "esbuild beamstagram --minify",
+        "beamstagram.deploy_wasm",
         "phx.digest"
-      ]
+      ],
+      "beamstagram.install_wasm": &install_wasm/1,
+      "beamstagram.deploy_wasm": &deploy_wasm/1
     ]
+  end
+
+  defp install_wasm(_) do
+    assets_dir = "assets/js"
+
+    {_, 0} = System.cmd("make", ["webassembly"], cd: "deps/nx_iree")
+    install_dir = "./deps/nx_iree/iree-runtime/webassembly/install"
+
+    for file <- ["nx_iree_runtime.wasm", "nx_iree_runtime.mjs"] do
+      File.cp!(Path.join(install_dir, file), Path.join(assets_dir, file))
+    end
+  end
+
+  defp deploy_wasm(_) do
+    File.mkdir_p!("priv/static/assets")
+    File.cp!("assets/js/nx_iree_runtime.wasm", "priv/static/assets/nx_iree_runtime.wasm")
   end
 end

@@ -8,7 +8,6 @@
 import Config
 
 config :beamstagram,
-  ecto_repos: [Beamstagram.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint

@@ -9,7 +9,6 @@ defmodule Beamstagram.Application do
   def start(_type, _args) do
     children = [
       BeamstagramWeb.Telemetry,
-      Beamstagram.Repo,
       {DNSCluster, query: Application.get_env(:beamstagram, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Beamstagram.PubSub},
       # Start the Finch HTTP client for sending emails
