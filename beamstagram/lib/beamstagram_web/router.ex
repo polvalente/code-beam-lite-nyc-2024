@@ -18,6 +18,7 @@ defmodule BeamstagramWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/image_processing", ImageProcessingLive
   end
 
   # Other scopes may use custom stacks.
