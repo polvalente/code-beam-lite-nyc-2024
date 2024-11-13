@@ -7,7 +7,6 @@ export const WasmWebcamHookMount = async (hook) => {
   const instance = await Module();
   let device = instance.createDevice();
   const video = document.getElementById("wasm-webcam");
-  let vminstance = instance.createVMInstance();
 
   hook.runtime = { instance, device };
 
@@ -23,6 +22,10 @@ export const WasmWebcamHookMount = async (hook) => {
   // Create an ImageData object
   let imageData = outputContext.createImageData(canvas.width, canvas.height);
 
+  hook.processing = false;
+  hook.lastFrameTime = 0;
+  hook.targetFrameInterval = 1000 / 15; // 15 FPS
+
   hook.durations = {
     input: null,
     call: null,
@@ -32,23 +35,35 @@ export const WasmWebcamHookMount = async (hook) => {
 
   function processFrame(video) {
     const bytecode_data_attr = video.getAttribute("data-bytecode");
-
     const filter_kind = video.getAttribute("data-filter-kind");
-    if (video.videoWidth == 0 || video.videoHeight == 0) {
+
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
       return;
     }
 
+    // Performance debugging
+    const frameStart = performance.now();
+
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    if (bytecode_data_attr === "") {
+      let inputData = context.getImageData(0, 0, canvas.width, canvas.height);
+      imageData.data.set(inputData.data);
+      outputContext.putImageData(imageData, 0, 0);
+      inputData = null;
+      return;
+    }
 
     const inputStart = performance.now();
     // Get the ImageData object from the canvas (whole canvas)
-    const inputData = context.getImageData(0, 0, canvas.width, canvas.height);
+    let inputData = context.getImageData(0, 0, canvas.width, canvas.height);
+    let uint8ClampedArray = inputData.data;
+    let inputArray = new Uint8Array(uint8ClampedArray);
 
-    // Extract the pixel data from ImageData (returns a Uint8ClampedArray)
-    const uint8ClampedArray = inputData.data;
+    // Clean up inputData after copying
+    inputData = null;
+    uint8ClampedArray = null;
 
-    // Convert the Uint8ClampedArray to a Uint8Array (if necessary)
-    const inputArray = new Uint8Array(uint8ClampedArray);
     let shape = new Int32Array([canvas.height, canvas.width, 4]);
 
     let input = undefined;
@@ -59,6 +74,8 @@ export const WasmWebcamHookMount = async (hook) => {
         type,
         hook.runtime.device
       );
+      inputArray = null;
+      shape = null;
     } catch (error) {
       console.error(error);
       return;
@@ -74,13 +91,15 @@ export const WasmWebcamHookMount = async (hook) => {
       const tint_inputs = JSON.parse(tint_params);
 
       let inputs_f32 = new Float32Array(tint_inputs);
-      const tint_shape = new Int32Array([4]);
+      let tint_shape = new Int32Array([4]);
       const tint_input_tensor = new instance.Tensor.create(
         inputs_f32,
         tint_shape,
         "f32",
         hook.runtime.device
       );
+      inputs_f32 = null;
+      tint_shape = null;
 
       inputs.push_back(tint_input_tensor);
     }
@@ -98,19 +117,22 @@ export const WasmWebcamHookMount = async (hook) => {
     const bytecode_data = atob(bytecode_data_attr);
 
     // Create a Uint8Array from the decoded base64 string
-    const bytecode_uint8Array = new Uint8Array(bytecode_data.length);
+    let bytecode_uint8Array = new Uint8Array(bytecode_data.length);
 
     for (let i = 0; i < bytecode_data.length; i++) {
       bytecode_uint8Array[i] = bytecode_data.charCodeAt(i);
     }
 
     const bytecode = new instance.DataBuffer.create(bytecode_uint8Array);
+    bytecode_uint8Array = null;
     const bytecodeDuration = performance.now() - bytecodeStart;
     hook.durations.bytecode = hook.durations.bytecode
       ? (bytecodeDuration + hook.durations.bytecode) / 2
       : bytecodeDuration;
 
     const callStart = performance.now();
+
+    let vminstance = instance.createVMInstance();
 
     let [call_status, outputs] = instance.call(
       vminstance,
@@ -141,17 +163,14 @@ export const WasmWebcamHookMount = async (hook) => {
     call_status.delete();
     const outputStart = performance.now();
     const outputTensor = outputs.get(0);
-    const outputArray = outputTensor.toFlatArray();
+    let outputArray = outputTensor.toFlatArray();
     for (let i = 0; i < outputs.size(); i++) {
       outputs.get(i).delete();
     }
     outputs.delete();
 
-    if (bytecode_data_attr !== "") {
-      imageData.data.set(outputArray);
-    } else {
-      imageData.data.set(inputData.data);
-    }
+    imageData.data.set(outputArray);
+    outputArray = null;
 
     const outputDuration = performance.now() - outputStart;
     hook.durations.output = hook.durations.output
@@ -165,6 +184,46 @@ export const WasmWebcamHookMount = async (hook) => {
       inputs.get(i).delete();
     }
     inputs.delete();
+
+    // Log total frame time if it's high
+    const totalTime = performance.now() - frameStart;
+    if (totalTime > 50) {
+      // Log if frame takes more than 50ms
+      console.debug(`Long frame: ${totalTime.toFixed(1)}ms`);
+      // Optionally log individual timings
+      console.debug({
+        input: hook.durations.input,
+        bytecode: hook.durations.bytecode,
+        call: hook.durations.call,
+        output: hook.durations.output,
+      });
+    }
+  }
+
+  function animationLoop(timestamp) {
+    // Skip if we're still processing the last frame
+    if (hook.processing) {
+      requestAnimationFrame(animationLoop);
+      return;
+    }
+
+    // Check if enough time has passed since last frame
+    if (timestamp - hook.lastFrameTime < hook.targetFrameInterval) {
+      requestAnimationFrame(animationLoop);
+      return;
+    }
+
+    hook.processing = true;
+    hook.lastFrameTime = timestamp;
+
+    try {
+      processFrame(video);
+    } catch (error) {
+      console.error("Frame processing error:", error);
+    } finally {
+      hook.processing = false;
+      requestAnimationFrame(animationLoop);
+    }
   }
 
   if (navigator.mediaDevices.getUserMedia) {
@@ -172,7 +231,8 @@ export const WasmWebcamHookMount = async (hook) => {
       .getUserMedia({ video: true })
       .then(function (stream) {
         video.srcObject = stream;
-        setInterval(processFrame, interval, video);
+        // Start the animation loop
+        requestAnimationFrame(animationLoop);
       })
       .catch(function (error) {
         console.log("Something went wrong!");
@@ -181,7 +241,7 @@ export const WasmWebcamHookMount = async (hook) => {
 };
 
 export const WasmWebcamHookDestroy = (hook) => {
-  hook.runtime.bytecode.delete();
+  // hook.runtime.bytecode.delete();
   hook.runtime.device.delete();
-  hook.runtime.vminstance.delete();
+  // hook.runtime.vminstance.delete();
 };

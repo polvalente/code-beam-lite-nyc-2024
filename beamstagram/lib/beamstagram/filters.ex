@@ -86,7 +86,9 @@ defmodule Beamstagram.Filters do
     kernel / Nx.sum(kernel)
   end
 
-  defn apply_kernel(image, kernel) do
+  defn apply_kernel(image, kernel, opts \\ []) do
+    opts = keyword!(opts, strides: [1, 1])
+
     # assumes channels are last in the image
     input_type = Nx.type(image)
     image = image / 255
@@ -99,7 +101,8 @@ defmodule Beamstagram.Filters do
     |> Nx.conv(Nx.reshape(kernel, {1, 1, m, n}),
       padding: :same,
       input_permutation: [3, 0, 1, 2],
-      output_permutation: [3, 0, 1, 2]
+      output_permutation: [3, 0, 1, 2],
+      strides: opts[:strides]
     )
     |> Nx.squeeze(axes: [0])
     |> Nx.multiply(255)
