@@ -1,5 +1,6 @@
 defmodule BeamstagramWeb.ImageProcessingLive do
   use BeamstagramWeb, :live_view
+  use BeamstagramNative, :live_view
 
   defmodule FilterParams do
     use Ecto.Schema
