@@ -422,6 +422,7 @@
 		3725081C2CE4735B00706610 /* BeamstagramCppBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeamstagramCppBridge.swift; sourceTree = "<group>"; };
 		372508332CE47EF000706610 /* libnx_iree_runtime.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnx_iree_runtime.so; path = BuildArtifacts/libnx_iree_runtime.so; sourceTree = "<group>"; };
 		372508362CE4818600706610 /* libnx_iree_runtime.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libnx_iree_runtime.so; sourceTree = "<group>"; };
+		372508392CE7326F00706610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3E263464A35EA0A01DC6C35E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		43F6AB0D9D0E42BDE9E0E2E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		695A8895FA74657B7FF4B02A /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
@@ -1441,6 +1442,7 @@
 		90CAA863992FD94B73F1B126 /* Beamstagram */ = {
 			isa = PBXGroup;
 			children = (
+				372508392CE7326F00706610 /* Info.plist */,
 				7D11B53CF050C67B91AB5881 /* Preview Content */,
 				43F6AB0D9D0E42BDE9E0E2E8 /* Assets.xcassets */,
 				E34E8B34AD4DAC6A90225EBE /* Beamstagram.swift */,
@@ -1675,8 +1677,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = QEGUFG335L;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/$(PROJECT_NAME)/nx_iree/include";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				INFOPLIST_FILE = Beamstagram/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Beamstagram;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Image Processing";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.example.Beamstagram;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1688,10 +1698,11 @@
 				);
 				OTHER_CFLAGS = "-I$(PROJECT_NAME)/nx_iree/include";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Beamstagram;
+				REGISTER_APP_GROUPS = NO;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_NAME)/$(PROJECT_NAME)-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2,3";
@@ -1703,8 +1714,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = QEGUFG335L;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/$(PROJECT_NAME)/nx_iree/include";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				INFOPLIST_FILE = Beamstagram/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Beamstagram;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Image Processing";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.example.Beamstagram;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1716,10 +1735,11 @@
 				);
 				OTHER_CFLAGS = "-I$(PROJECT_NAME)/nx_iree/include";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.Beamstagram;
+				REGISTER_APP_GROUPS = NO;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_NAME)/$(PROJECT_NAME)-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2,3";

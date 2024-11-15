@@ -74,14 +74,7 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
     @LiveAttribute("device") private var deviceURI: String? = nil
     @LiveAttribute("height") private var height: Int? = nil
     @LiveAttribute("width") private var width: Int? = nil
-    @Event("on-mount", type: "change") private var onMount
-    
-//    @LiveElementIgnored
-//    @State private var bytecodeSize: UInt64 = 0
-//    
-//    @LiveElementIgnored
-//    @State private var bytecodePointer: UnsafePointer<CUnsignedChar>? = nil
-//    
+ 
     @LiveElementIgnored
     private var vmInstance: UnsafePointer<iree_vm_instance_t>? = nil
     
@@ -99,9 +92,6 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
     
     @LiveElementIgnored
     @State private var timer: AnyCancellable?
-    
-    @LiveElementIgnored
-    @State private var noiseAmount: Float = 0
     
     init() {
         if self.deviceURI != nil {
@@ -123,20 +113,6 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
     
     var body: some View {
         VStack {
-            if bytecode != nil {
-                Text("Code loaded")
-                    .padding()
-            } else {
-                Text("Code not loaded")
-                    .padding()
-            }
-            HStack {
-                Text("Noise Amount:").padding()
-                SwiftUI.Slider(
-                    value: $noiseAmount,
-                    in: 0...1
-                )
-            }
             HStack {
                 VStack {
                     Text("Input").padding()
@@ -150,7 +126,6 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
         }
         .onAppear() {
             initCameraPreview() // Initialize when the view appears
-            onMount(value: nxIREEListAllDevices())
             startCaptureTimer()
         }
         .onChange(of: height) {
@@ -264,14 +239,13 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
             let errorMessageCapacity = 256
             let errorMessage = UnsafeMutablePointer<CChar>.allocate(capacity: errorMessageCapacity)
             
-            let seed: UInt32 = .random(in: UInt32.min...UInt32.max)
             var outputPixelDataPointer: UnsafeMutablePointer<CUnsignedChar>? = nil
 //            let outputPixelDataPointer: UnsafeMutablePointer<CUnsignedChar>? = nil
             pixelData.withUnsafeMutableBytes { rawBufferPointer in
                 let ptr = rawBufferPointer.baseAddress!.assumingMemoryBound(to: UInt8.self)
                 
                 // Now you can pass `cPointer` to your C function
-                outputPixelDataPointer = nx_iree_image_call(vmInstance!, device!, bytecodeSize, UnsafePointer(bytecodePointer)!, inputDims, ptr, errorMessage, seed, noiseAmount)
+                outputPixelDataPointer = nx_iree_image_call(vmInstance!, device!, bytecodeSize, UnsafePointer(bytecodePointer)!, inputDims, ptr, errorMessage)
             }
             
             

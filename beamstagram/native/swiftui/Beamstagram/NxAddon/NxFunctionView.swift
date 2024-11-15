@@ -143,9 +143,7 @@ struct NxFunctionView<Root: RootRegistry>: View {
             deviceURIcstr?.deallocate()
             
             let errorMessage = UnsafeMutablePointer<CChar>.allocate(capacity: 256)
-            
-            print("Executing function \(signature ?? "None") on device: \(deviceURI ?? "None")")
-            
+                        
             let outputByteSizes = UnsafeMutablePointer<UInt64>.allocate(capacity: numOutputs!)
 
             let serializedOutputs = nx_iree_call(
