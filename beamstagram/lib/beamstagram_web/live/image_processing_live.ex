@@ -1,5 +1,6 @@
 defmodule BeamstagramWeb.ImageProcessingLive do
   use BeamstagramWeb, :live_view
+  use BeamstagramNative, :live_view
 
   defmodule FilterParams do
     use Ecto.Schema
@@ -85,15 +86,25 @@ defmodule BeamstagramWeb.ImageProcessingLive do
      )}
   end
 
-  defp compile(%FilterParams{filter: nil}), do: nil
+  defp compile(%FilterParams{filter: nil}, _platform), do: nil
 
-  defp compile(%FilterParams{} = filter_params) do
-    iree_compiler_flags = [
-      "--iree-hal-target-backends=llvm-cpu",
-      "--iree-input-type=stablehlo",
-      "--iree-llvmcpu-target-triple=wasm32-unknown-emscripten",
-      "--iree-llvmcpu-target-cpu-features=+atomics,+bulk-memory,+simd128"
-    ]
+  defp compile(%FilterParams{} = filter_params, platform) do
+    iree_compiler_flags =
+      case platform do
+        :wasm ->
+          [
+            "--iree-hal-target-backends=llvm-cpu",
+            "--iree-input-type=stablehlo",
+            "--iree-llvmcpu-target-triple=wasm32-unknown-emscripten",
+            "--iree-llvmcpu-target-cpu-features=+atomics,+bulk-memory,+simd128"
+          ]
+
+        platform when platform in [:ios, :ios_simulator, :macos] ->
+          [
+            "--iree-hal-target-backends=llvm-cpu",
+            "--iree-input-type=stablehlo"
+          ]
+      end
 
     function = Beamstagram.Filters.build(Map.from_struct(filter_params))
 
@@ -242,20 +253,37 @@ defmodule BeamstagramWeb.ImageProcessingLive do
 
     filter_params = Ecto.Changeset.apply_changes(changeset)
 
-    bytecode =
-      if filter_params.should_recompile do
-        compile(filter_params)
-      else
-        socket.assigns.bytecode
+    socket =
+      assign(socket,
+        filter_params: filter_params,
+        filter_form: filter_form
+      )
+
+    platform =
+      case socket.assigns do
+        %{_interface: %{"os" => "iOS"}} ->
+          if System.get_env("COMPILE_FOR_IOS_SIMULATOR") == "true" do
+            :ios_simulator
+          else
+            :ios
+          end
+
+        %{_interface: %{"os" => "macOS"}} ->
+          :macos
+
+        _ ->
+          :wasm
       end
 
-    # Update assigns for compilation
-    assigns = %{
-      filter_params: filter_params,
-      filter_form: filter_form,
-      bytecode: bytecode
-    }
+    socket =
+      if filter_params.should_recompile do
+        assign_async(socket, :bytecode, fn ->
+          {:ok, %{bytecode: compile(filter_params, platform)}}
+        end)
+      else
+        socket
+      end
 
-    {:noreply, assign(socket, assigns)}
+    {:noreply, socket}
   end
 end

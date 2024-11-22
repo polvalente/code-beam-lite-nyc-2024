@@ -1,0 +1,58 @@
+
+<LiveForm
+  id="filter-form"
+  phx-change="update_filter"
+  phx-debounce="blur"
+>
+  <VStack style="padding(100)">
+  <NxCameraFunction
+    bytecode={@bytecode}
+    device={"local-sync://"}
+    height={480}
+    width={640}
+  />
+  <.input
+      style="pickerStyle(.segmented)"
+      type="Picker"
+      name="filter"
+      value={@filter_params.filter}
+      options={Enum.reject(@filter_options, fn {k, _} -> k == :None end)} />
+    <Divider />
+    <HStack>
+      <Text>Kernel Size</Text>
+      <.input type="Stepper" name="kernel_size" value={@filter_params.kernel_size} lowerBound={1} upperBound={21} step={2} />
+      <Text><%= @filter_params.kernel_size %></Text>
+      <Spacer />
+    </HStack>
+    <HStack :if={@filter_params.filter in [:gaussian_blur, :sharpen]}>
+      <Text>Sigma</Text>
+      <.input type="Slider" name="sigma" value={@filter_params.sigma} step={0.5} lowerBound={0.1} upperBound={50} />
+      <Text><%= @filter_params.sigma %></Text>
+      <Spacer />
+    </HStack>
+    <HStack :if={@filter_params.filter == :sharpen}>
+      <Text>Blur Kernel</Text>
+      <.input type="Picker" style="pickerStyle(.segmented)" name="blur_kernel" value={@filter_params.blur_kernel} options={@blur_kernel_options} />
+    </HStack>
+    <HStack :if={@filter_params.filter == :tint}>
+      <VStack>
+        <HStack>
+          <Text>Red</Text>
+          <.input type="Slider" name="tint_r" value={@filter_params.tint_r} step={1} lowerBound={0} upperBound={255} />
+        </HStack>
+        <HStack>
+        <Text>Green</Text>
+        <.input type="Slider" name="tint_g" value={@filter_params.tint_g} step={1} lowerBound={0} upperBound={255} />
+        </HStack>
+        <HStack>
+        <Text>Blue</Text>
+        <.input type="Slider" name="tint_b" value={@filter_params.tint_b} step={1} lowerBound={0} upperBound={255} />
+        </HStack>
+        <HStack>
+        <Text>Alpha</Text>
+        <.input type="Slider" name="tint_alpha" value={@filter_params.tint_alpha} step={0.1} lowerBound={0} upperBound={1} />
+        </HStack>
+      </VStack>
+    </HStack>
+  </VStack>
+</LiveForm>

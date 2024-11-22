@@ -2,10 +2,15 @@ defmodule BeamstagramWeb.Router do
   use BeamstagramWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
+    plug :accepts, [
+      "html",
+      "swiftui"
+    ]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, html: {BeamstagramWeb.Layouts, :root}
+    plug :put_root_layout,
+      html: {BeamstagramWeb.Layouts, :root},
+      swiftui: {BeamstagramWeb.Layouts.SwiftUI, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -17,7 +22,6 @@ defmodule BeamstagramWeb.Router do
   scope "/", BeamstagramWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
     live "/image_processing", ImageProcessingLive
   end
 
