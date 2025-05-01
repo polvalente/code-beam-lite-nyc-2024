@@ -144,7 +144,7 @@ defmodule BeamstagramWeb.ImageProcessingLive do
     ~H"""
     <div id="wasm-webcam-container" phx-hook="WasmWebcamHook">
       <video
-        data-bytecode={if(@bytecode, do: Base.encode64(@bytecode), else: "")}
+        data-bytecode={if(@bytecode && @bytecode.ok?, do: Base.encode64(@bytecode.result), else: "")}
         data-filter-kind={@filter_params.filter}
         id="wasm-webcam"
         width="640"
@@ -154,7 +154,7 @@ defmodule BeamstagramWeb.ImageProcessingLive do
       </video>
       <meta id="tint-params" content={Jason.encode!(@tint_params)} />
       <canvas
-        {if(@bytecode, do: %{"style" => "display: none"}, else: %{})}
+        {if(@bytecode && @bytecode.ok?, do: %{"style" => "display: none"}, else: %{})}
         id="wasm-webcam-input"
         width="640"
         height="480"
@@ -162,7 +162,7 @@ defmodule BeamstagramWeb.ImageProcessingLive do
       </canvas>
       <canvas
         id="wasm-webcam-output"
-        {if(@bytecode, do: %{}, else: %{"style" => "display: none"})}
+        {if(@bytecode && @bytecode.ok?, do: %{}, else: %{"style" => "display: none"})}
         width="640"
         height="480"
       >
@@ -198,7 +198,6 @@ defmodule BeamstagramWeb.ImageProcessingLive do
         <.label for="tint_r">Tint Red</.label>
         <.input
           type="range"
-          phx-throttle="500"
           name="tint_r"
           value={@filter_params.tint_r}
           step="1"
@@ -209,7 +208,6 @@ defmodule BeamstagramWeb.ImageProcessingLive do
         <.label for="tint_g">Tint Green</.label>
         <.input
           type="range"
-          phx-throttle="500"
           name="tint_g"
           value={@filter_params.tint_g}
           step="1"
@@ -220,7 +218,6 @@ defmodule BeamstagramWeb.ImageProcessingLive do
         <.label for="tint_b">Tint Blue</.label>
         <.input
           type="range"
-          phx-throttle="500"
           name="tint_b"
           value={@filter_params.tint_b}
           step="1"
@@ -230,7 +227,6 @@ defmodule BeamstagramWeb.ImageProcessingLive do
 
         <.label for="tint_alpha">Tint Alpha</.label>
         <.input
-          phx-throttle="500"
           type="range"
           name="tint_alpha"
           value={@filter_params.tint_alpha}

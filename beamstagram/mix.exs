@@ -58,7 +58,8 @@ defmodule Beamstagram.MixProject do
       {:bandit, "~> 1.2"},
       {:stb_image, "~> 0.1"},
       {:exla, "~> 0.9.1"},
-      {:nx_iree, github: "elixir-nx/nx_iree", branch: "main"},
+      {:nx_iree, "~> 0.0.1"},
+
       {:live_view_native, "~> 0.3.0"},
       {:live_view_native_stylesheet, "~> 0.3.0"},
       {:live_view_native_swiftui, "~> 0.3.0"},
