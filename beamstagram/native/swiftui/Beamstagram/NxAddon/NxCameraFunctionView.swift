@@ -11,17 +11,21 @@ import LiveViewNative
 import UIKit
 import Combine
 
+import os
+
+let logger = Logger(subsystem: "com.polvalente.LiveNxIREE", category: "NxCameraFunctionView")
+
 extension UIImage {
     func correctImageOrientation() -> UIImage {
         if self.imageOrientation == .up {
             return self
         }
-        
+
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         self.draw(in: CGRect(origin: .zero, size: self.size))
         let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        
+
         return normalizedImage
     }
 
@@ -34,16 +38,16 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return resizedImage
     }
-    
+
     func getRGBAData() -> ([UInt8], [UInt64])? {
         guard let cgImage = self.cgImage else { return nil }
-        
+
         let width = cgImage.width
         let height = cgImage.height
         let bytesPerPixel = 4  // RGBA has 4 bytes per pixel
         let bytesPerRow = bytesPerPixel * width
         let totalBytes = height * bytesPerRow
-        
+
         var rgbaData = [UInt8](repeating: 0, count: totalBytes)
         guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) else { return nil }
 
@@ -62,7 +66,7 @@ extension UIImage {
         }
 
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
-        
+
         return (rgbaData, [UInt64(height), UInt64(width), 4])  // 4 channels (RGBA)
     }
 }
@@ -70,47 +74,69 @@ extension UIImage {
 @LiveElement
 struct NxCameraFunctionView<Root: RootRegistry>: View {
     @_documentation(visibility: public)
-    @LiveAttribute("bytecode") private var bytecode: String? = nil
-    @LiveAttribute("device") private var deviceURI: String? = nil
+    @LiveAttribute("bytecode") private var bytecodeBase64: String? = nil
+    @LiveAttribute("device") private var deviceURI: String? = "local-sync://";
     @LiveAttribute("height") private var height: Int? = nil
     @LiveAttribute("width") private var width: Int? = nil
- 
-    @LiveElementIgnored
-    private var vmInstance: UnsafePointer<iree_vm_instance_t>? = nil
     
     @LiveElementIgnored
-    @State private var device: UnsafePointer<iree_hal_device_t>? = nil
+    @EnvironmentObject private var ireeEnv: IRESEnvironment
     
     @LiveElementIgnored
     @StateObject private var cameraView: CameraCaptureView = CameraCaptureView()
-    
+
     @LiveElementIgnored
     @StateObject private var imageView = ImageView()
-    
+
     @LiveElementIgnored
     @StateObject private var previewImageView = ImageView()
-    
+
     @LiveElementIgnored
     @State private var timer: AnyCancellable?
-    
+
     init() {
-        if self.deviceURI != nil {
-            let deviceURIcstr = strdup(deviceURI!)
-            self.device = nx_iree_create_device(UnsafePointer(deviceURIcstr)!)
-            free(deviceURIcstr)
-        }
-        
-        vmInstance = nx_iree_create_instance()
         initCameraPreview()
     }
-    
+
     private func initCameraPreview() {
         if let height = height, let width = width {
             cameraView.initCameraPreview(height: height, width: width)
         }
     }
-    
-    
+
+    // Function to list and print all available devices
+    private func listAllDevices() {
+        print("Listing all available IREE devices...")
+
+        // Create a variable to store the count
+        var count: UInt64 = 0
+
+        // Call the function with the address of count
+        guard let deviceStrings = nx_iree_list_all_devices(&count) else {
+            print("ERROR: Failed to get device list")
+            return
+        }
+
+        print("Found \(count) devices:")
+
+        // Iterate through the returned strings
+        for i in 0..<Int(count) {
+            // Get the i-th string pointer from the array
+            if let deviceCString = deviceStrings[i] {
+                // Convert C string to Swift string
+                let deviceName = String(cString: deviceCString)
+                print("  Device \(i): \(deviceName)")
+            } else {
+                print("  Device \(i): <null pointer>")
+            }
+        }
+
+        // Note: You'll need to ensure the memory is freed properly
+        // This may require a separate function call if the C API expects it
+        // Something like: nx_iree_free_device_list(deviceStrings, count)
+    }
+
+
     var body: some View {
         VStack {
             HStack {
@@ -125,6 +151,25 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
             }
         }
         .onAppear() {
+            listAllDevices()
+
+            if let deviceURI = self.deviceURI {
+                let deviceURIcstr = strdup(deviceURI)
+                let devicePointer = nx_iree_create_device(UnsafePointer(deviceURIcstr)!)
+                
+                if devicePointer == nil {
+                    logger.debug("Failed to initialize nx_iree_device")
+                } else {
+                    logger.debug("Initialized nx_iree_device successfully")
+                }
+                
+                ireeEnv.device = devicePointer
+                free(deviceURIcstr)
+            } else {
+                logger.debug("Did not receive deviceURI on init");
+            }
+
+            ireeEnv.vmInstance = nx_iree_create_instance()
             initCameraPreview() // Initialize when the view appears
             startCaptureTimer()
         }
@@ -138,22 +183,34 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
             stopCaptureTimer()
         }
         .onChange(of: deviceURI) {
-            if self.deviceURI != nil {
-                if self.device != nil {
-                    nx_iree_release_device(self.device)
-                }
-                let deviceURIcstr = strdup(deviceURI!)
-                self.device?.deallocate()
-                self.device = nx_iree_create_device(UnsafePointer(deviceURIcstr)!)
-                free(deviceURIcstr)
+//            if self.deviceURI != nil && self.device == nil {
+//                if self.device != nil {
+//                    nx_iree_release_device(self.device)
+//                }
+//                logger.debug("Received new deviceURI: \(self.deviceURI!)");
+//                let deviceURIcstr = strdup(deviceURI!);
+//                self.device?.deallocate();
+//                self.device = nx_iree_create_device(UnsafePointer(deviceURIcstr)!);
+//                if self.device == nil {
+//                    logger.debug("Failed to nx_iree_device");
+//                } else {
+//                    logger.debug("Initialized nx_iree_device");
+//                }
+//                free(deviceURIcstr)
+//            }
+        }
+        .onChange(of: bytecodeBase64) {
+            if let decodedData = Data(base64Encoded: bytecodeBase64!),
+               let (size, ptr) = convertBase64StringToBytecode(decodedData) {
+                logger.debug("Received new bytecode with size: \(size)");
+                self.ireeEnv.bytecodeSize = size;
+                self.ireeEnv.bytecodePointer = ptr;
+                stopCaptureTimer()
+                startCaptureTimer()
             }
         }
-        .onChange(of: bytecode) {
-            stopCaptureTimer()
-            startCaptureTimer()
-        }
     }
-    
+
     private func startCaptureTimer() {
         timer = Timer.publish(every: 1/60, on: .main, in: .common)
             .autoconnect()
@@ -173,39 +230,39 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
             }
         }
     }
-        
+
     private func convertBase64StringToBytecode(_ decodedData: Data) -> (bytecodeSize: UInt64, bytecodePointer: UnsafePointer<CUnsignedChar>?)? {
         // Step 1: Get the size of the data
         let bytecodeSize = UInt64(decodedData.count)
-        
+
         // Step 2: Convert Data to UnsafePointer<CUnsignedChar>
         // We use withUnsafeBytes to get a pointer to the data
         let bytecodePointer = decodedData.withUnsafeBytes { (pointer: UnsafeRawBufferPointer) -> UnsafePointer<CUnsignedChar>? in
             return pointer.bindMemory(to: CUnsignedChar.self).baseAddress
         }
-        
+
         return (bytecodeSize, bytecodePointer)
     }
-    
+
     func imageFromRGBAData(rgbaData: [UInt8], width: Int, height: Int) -> UIImage? {
         // Ensure that the data size matches the expected size
         guard rgbaData.count == width * height * 4 else {
             print("Invalid data size")
             return nil
         }
-        
+
         // Create a CFData object from the RGBA data array
         let cfData = CFDataCreate(nil, rgbaData, rgbaData.count)
-        
+
         // Create a CGDataProvider from the CFData object
         guard let dataProvider = CGDataProvider(data: cfData!) else {
             print("Failed to create CGDataProvider")
             return nil
         }
-        
+
         // Define the color space (sRGB)
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        
+
         // Create a CGImage from the data provider
         guard let cgImage = CGImage(
             width: width,
@@ -223,32 +280,41 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
             print("Failed to create CGImage")
             return nil
         }
-        
+
         // Convert the CGImage to a UIImage and return it
         return UIImage(cgImage: cgImage)
     }
     
     private func run(_ image: UIImage) {
-        if vmInstance != nil,
-           device != nil,
-           bytecode != nil,
+        // logger.info("Called run function");
+        // if vmInstance == nil {
+        //    logger.debug("vmInstance is nil");
+        //}
+        //if device == nil {
+        //   logger.debug("device is nil");
+        //}
+        //if bytecode == nil {
+        //    logger.debug("bytecode is nil");
+        //}
+
+        if ireeEnv.vmInstance != nil,
+           ireeEnv.device != nil,
+           ireeEnv.bytecodePointer != nil,
            let resizedImage = image.resize(to: CGSize(width: width!, height: height!)),
-           var (pixelData, inputDims) = resizedImage.getRGBAData(),
-           let decodedData = Data(base64Encoded: bytecode!),
-           let (bytecodeSize, bytecodePointer) = convertBase64StringToBytecode(decodedData) {
+           var (pixelData, inputDims) = resizedImage.getRGBAData() {
             let errorMessageCapacity = 256
             let errorMessage = UnsafeMutablePointer<CChar>.allocate(capacity: errorMessageCapacity)
-            
+
             var outputPixelDataPointer: UnsafeMutablePointer<CUnsignedChar>? = nil
 //            let outputPixelDataPointer: UnsafeMutablePointer<CUnsignedChar>? = nil
             pixelData.withUnsafeMutableBytes { rawBufferPointer in
                 let ptr = rawBufferPointer.baseAddress!.assumingMemoryBound(to: UInt8.self)
-                
+
                 // Now you can pass `cPointer` to your C function
-                outputPixelDataPointer = nx_iree_image_call(vmInstance!, device!, bytecodeSize, UnsafePointer(bytecodePointer)!, inputDims, ptr, errorMessage)
+                outputPixelDataPointer = nx_iree_image_call(ireeEnv.vmInstance!, ireeEnv.device!, ireeEnv.bytecodeSize, UnsafePointer(ireeEnv.bytecodePointer)!, inputDims, ptr, errorMessage)
             }
-            
-            
+
+
             guard let _ = outputPixelDataPointer else {
                 let errorString = String(cString: errorMessage)
                 print("Failed execution with error: \(errorString)")
@@ -256,19 +322,19 @@ struct NxCameraFunctionView<Root: RootRegistry>: View {
                 mutablePointer.deallocate()
                 return
             }
-    
+
             // Create a [UInt8] array from the pointer
             let bufferCount = width! * height! * 4
             let buffer = UnsafeBufferPointer(start: UnsafePointer(outputPixelDataPointer), count: bufferCount)
             let outputPixelData = Array(buffer)
-            
+
             let outputImage = imageFromRGBAData(rgbaData: outputPixelData, width: width!, height: height!)
-            
+
             self.imageView.update(outputImage, width!, height!)
-            
+
             let mutablePointer = errorMessage.withMemoryRebound(to: CChar.self, capacity: Int(errorMessageCapacity), { $0 })
             mutablePointer.deallocate()
-            
+
             if let ptr = outputPixelDataPointer?.withMemoryRebound(to: CUnsignedChar.self, capacity: Int(bufferCount), { $0 }) {
                 ptr.deallocate()
             }

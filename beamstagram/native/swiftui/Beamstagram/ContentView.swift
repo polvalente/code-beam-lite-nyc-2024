@@ -11,7 +11,8 @@ struct ContentView: View {
     var body: some View {
         #LiveView(
             .automatic(
-                development: .localhost(path: "/image_processing"),
+//                development: .localhost(path: "/image_processing"),
+                development: URL(string: "http://paulos-macbook-pro-2.local:4000/image_processing")!,
                 production: URL(string: "https://example.com")!
             ),
             addons: [

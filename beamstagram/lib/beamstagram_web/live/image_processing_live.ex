@@ -29,6 +29,8 @@ defmodule BeamstagramWeb.ImageProcessingLive do
     end
 
     def changeset(data \\ %__MODULE__{}, params) do
+      params = params |> Enum.reject(fn {_k, v} -> is_nil(v) end) |> Map.new()
+
       changeset =
         Ecto.Changeset.cast(data, params, [
           :filter,
@@ -102,7 +104,8 @@ defmodule BeamstagramWeb.ImageProcessingLive do
         platform when platform in [:ios, :ios_simulator, :macos] ->
           [
             "--iree-hal-target-backends=llvm-cpu",
-            "--iree-input-type=stablehlo"
+            "--iree-input-type=stablehlo",
+            "--iree-execution-model=async-internal"
           ]
       end
 
