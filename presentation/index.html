@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Image Processing in the Browser with Nx</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css" />
+    <link
+      rel="stylesheet"
+      href="node_modules/reveal.js/dist/theme/black.css"
+      id="theme"
+    />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- Title Slide -->
+        <section>
+          <h1>Image Processing in the Browser with Nx</h1>
+          <p>Paulo Valente</p>
+        </section>
+        <!-- Intro Slide -->
+        <section>
+          <h2>About Me</h2>
+          <ul>
+            <li>Brazilian</li>
+            <li>Electronics and Computer Engineering @ UFRJ</li>
+            <li>Software Engineer</li>
+            <li>Elixir Enthusiast</li>
+            <li>Nx and gRPC Core Team Member</li>
+          </ul>
+        </section>
+        <!-- Video Slide -->
+        <section>
+          <h2>Sample Video: Image Processing Demo</h2>
+          <video controls width="800">
+            <source src="videos/sample.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <p>
+            <small
+              >Replace <code>sample.mp4</code> with your own video in the
+              <code>videos/</code> folder.</small
+            >
+          </p>
+        </section>
+        <!-- IFrame Slide (now a link) -->
+        <section>
+          <h2>Live demo time!</h2>
+          <a
+            id="livebook-link"
+            href="http://127.0.0.1:4000/image_processing"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display: inline-flex;
+              align-items: center;
+              font-size: 1.5em;
+              text-decoration: none;
+              color: #3b82f6;
+              border: 2px solid #3b82f6;
+              border-radius: 8px;
+              padding: 0.5em 1em;
+              gap: 0.5em;
+            "
+          >
+            <span>Open</span>
+            <!-- Heroicons: external-link -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              style="width: 1.5em; height: 1.5em"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M18 13.5V18.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10.5M15.75 3H21m0 0v5.25M21 3l-9.75 9.75"
+              />
+            </svg>
+          </a>
+        </section>
+      </div>
+    </div>
+    <script src="node_modules/reveal.js/dist/reveal.js"></script>
+    <script>
+      Reveal.initialize();
+      // Configurable link URL via query param
+      function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+      }
+      const livebookUrl = getQueryParam("iframe_url");
+      if (livebookUrl) {
+        document.getElementById("livebook-link").href = livebookUrl;
+      }
+    </script>
+  </body>
+</html>

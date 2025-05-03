@@ -50,6 +50,27 @@ defmodule BeamstagramWeb.ImageProcessingLive do
 
       Ecto.Changeset.put_change(changeset, :should_recompile, should_recompile)
     end
+
+    defimpl String.Chars do
+      def to_string(%FilterParams{} = filter_params) do
+        case filter_params.filter do
+          nil ->
+            "None"
+
+          :gaussian_blur ->
+            "Gaussian Blur (#{filter_params.kernel_size}x#{filter_params.kernel_size}, #{filter_params.sigma})"
+
+          :uniform_blur ->
+            "Uniform Blur (#{filter_params.kernel_size}x#{filter_params.kernel_size})"
+
+          :sharpen ->
+            "Sharpen (#{filter_params.blur_kernel}) #{filter_params.kernel_size}x#{filter_params.kernel_size} #{if(filter_params.blur_kernel == :gaussian_blur, do: ", #{filter_params.sigma}", else: "")}"
+
+          :tint ->
+            "Tint"
+        end
+      end
+    end
   end
 
   def mount(_params, _session, socket) do
@@ -145,7 +166,7 @@ defmodule BeamstagramWeb.ImageProcessingLive do
       end
 
     ~H"""
-    <div id="wasm-webcam-container" phx-hook="WasmWebcamHook">
+    <div class="flex items-center justify-center" id="wasm-webcam-container" phx-hook="WasmWebcamHook">
       <video
         data-bytecode={if(@bytecode && @bytecode.ok?, do: Base.encode64(@bytecode.result), else: "")}
         data-filter-kind={@filter_params.filter}
@@ -276,13 +297,30 @@ defmodule BeamstagramWeb.ImageProcessingLive do
 
     socket =
       if filter_params.should_recompile do
-        assign_async(socket, :bytecode, fn ->
-          {:ok, %{bytecode: compile(filter_params, platform)}}
+        start_async(socket, :compile, fn ->
+          compile(filter_params, platform)
         end)
       else
         socket
       end
 
     {:noreply, socket}
+  end
+
+  def handle_async(:compile, {:ok, nil}, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_async(:compile, {:ok, bytecode}, socket) do
+    {:noreply,
+     socket
+     |> assign(bytecode: Phoenix.LiveView.AsyncResult.ok(bytecode))
+     |> put_flash(:info, "Filter compiled: #{socket.assigns.filter_params || ""}")}
+  end
+
+  def handle_async(:compile, {:error, error}, socket) do
+    {:noreply,
+     socket
+     |> put_flash(:error, "Error compiling filter: #{inspect(error)}")}
   end
 end
