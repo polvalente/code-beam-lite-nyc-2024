@@ -1,0 +1,85 @@
+# Presentation Planning Checklist
+
+- [ ] Switch Reveal.js to light mode (white theme)
+  - [ ] Change theme link in HTML to use 'white.css'
+  - [ ] Verify appearance and contrast
+
+- [ ] Introduction slide (general topics)
+  - [ ] Add slide with title 'Introduction'
+  - [ ] List all main topics to be covered
+
+- [ ] What are matrices? (placeholder for manim static rendering)
+  - [ ] Add slide with title 'What are matrices?'
+  - [ ] Add placeholder for manim static rendering (number, vector, matrix)
+  - [ ] Add brief explanation of each (number, vector, matrix)
+  - [ ] Substitute placeholder with actual manim static rendering (number, vector, matrix)
+
+- [ ] What is Nx? (brief description)
+  - [ ] Add slide with title 'What is Nx?'
+  - [ ] Write a brief, topic-based description of Nx
+
+- [ ] Nx function example (Elixir code: add(cos(x), sin(y)))
+  - [ ] Add slide with Elixir code block for add(cos(x), sin(y))
+  - [ ] Add example function call
+  - [ ] Ensure syntax highlighting for Elixir
+
+- [ ] How computers represent images (placeholder for RGBA cube manim render)
+  - [ ] Add slide with title 'How computers represent images'
+  - [ ] Add placeholder for manim static RGBA cube rendering
+  - [ ] Add explanation of RGBA channels as matrices
+  - [ ] Substitute placeholder with actual manim static RGBA cube rendering
+
+- [ ] Convolution (placeholder for manim animation)
+  - [ ] Add slide with title 'Convolution'
+  - [ ] Add placeholder for manim animation (kernel sliding over 4x4 matrix)
+  - [ ] Briefly explain convolution operation
+  - [ ] Substitute placeholder with actual manim animation (kernel sliding over 4x4 matrix)
+
+- [ ] Kernel filters (introduce term, placeholder for sharpen filter render)
+  - [ ] Add slide introducing 'Kernel filters'
+  - [ ] Add placeholder for manim render of a sharpen filter
+  - [ ] Briefly explain what a kernel filter is
+  - [ ] Substitute placeholder with actual manim render of a sharpen filter
+
+- [ ] Uniform blur (7x7 kernel, post-effect image placeholder)
+  - [ ] Add slide for 'Uniform Blur'
+  - [ ] Show 7x7 kernel matrix (placeholder)
+  - [ ] Add placeholder for post-effect image
+  - [ ] Add brief explanation
+  - [ ] Substitute kernel matrix placeholder with actual 7x7 uniform blur kernel
+  - [ ] Substitute post-effect image placeholder with actual image
+
+- [ ] Gaussian blur (7x7 kernel, post-effect image placeholder)
+  - [ ] Add slide for 'Gaussian Blur'
+  - [ ] Show 7x7 Gaussian kernel matrix (placeholder)
+  - [ ] Add placeholder for post-effect image
+  - [ ] Add brief explanation
+  - [ ] Substitute kernel matrix placeholder with actual 7x7 Gaussian blur kernel
+  - [ ] Substitute post-effect image placeholder with actual image
+
+- [ ] Sharpen (7x7 kernel, post-effect image, formula 2 * I - K)
+  - [ ] Add slide for 'Sharpen'
+  - [ ] Show 7x7 kernel matrix (placeholder)
+  - [ ] Add placeholder for post-effect image
+  - [ ] Display formula: 2 * I - K (with K as the Gaussian kernel)
+  - [ ] Add brief explanation
+  - [ ] Substitute kernel matrix placeholder with actual 7x7 sharpen kernel
+  - [ ] Substitute post-effect image placeholder with actual image
+
+- [ ] Live demo link slide
+  - [ ] Ensure slide with live demo link is present
+  - [ ] Make link configurable via query param
+  - [ ] Add clear instructions for accessing the demo
+
+- [ ] iOS-embedded demo video slide
+  - [ ] Add slide with embedded video for iOS demo
+  - [ ] Update title and description for clarity
+  - [ ] Substitute video placeholder with actual iOS-embedded demo video
+
+- [ ] Conclusion slide
+  - [ ] Add slide summarizing key points
+  - [ ] Optionally add next steps or further reading
+
+- [ ] Thank you slide
+  - [ ] Add closing slide with 'Thank you' message
+  - [ ] Optionally add contact info or Q&A prompt

@@ -13,7 +13,7 @@ This folder contains a [Reveal.js](https://revealjs.com/) slideshow for the talk
 2. Start a local web server in this folder. For example:
 
    ```sh
-   npx serve .
+   npx server .
    # or
    python3 -m http.server 8000
    ```
