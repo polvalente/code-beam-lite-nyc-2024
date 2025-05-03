@@ -91,31 +91,21 @@ Example.my_fun(0.0, 1.57)
         <!-- Convolution Slide -->
         <section>
           <h2>Convolution</h2>
-          <div style="display: flex; gap: 2em; align-items: flex-start">
-            <div>
-              <strong>Visual:</strong>
-              <div style="margin-top: 1em; color: #888">
-                <em
-                  >TODO: manim animation of kernel sliding over 4x4 matrix goes
-                  here</em
-                >
-              </div>
-            </div>
-            <div>
-              <strong>Explanation:</strong>
-              <ul>
-                <li>
-                  Convolution applies a small matrix (kernel) to each region of
-                  the image
-                </li>
-                <li>
-                  Each output value is a weighted sum of neighboring pixels
-                </li>
-                <li>Used for edge detection, blurring, sharpening, etc.</li>
-                <li>Often uses zero-padding to keep output size consistent</li>
-              </ul>
-            </div>
-          </div>
+          <ul>
+            <li>
+              Convolution applies a small matrix (kernel) to each region of the
+              input, sliding the kernel over the input
+            </li>
+            <li>Each output value is a weighted sum of neighboring pixels</li>
+            <li>Used for edge detection, blurring, sharpening, etc.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Convolution</h2>
+          <video controls width="100%">
+            <source src="videos/ConvolutionAnimation.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </section>
         <!-- Kernel Filters Slide -->
         <section>
@@ -217,7 +207,7 @@ Example.my_fun(0.0, 1.57)
         <section>
           <h2>We can also deploy to iOS</h2>
           <video controls width="800">
-            <source src="videos/sample.mp4" type="video/mp4" />
+            <source src="videos/ios_demo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <p>

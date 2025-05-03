@@ -37,11 +37,11 @@ This file tracks the status of all placeholders in the presentation as of the la
 
 | Placeholder                        | Status         |
 |-------------------------------------|---------------|
-| Number/vector/matrix static image   | To do         |
+| Number/vector/matrix static image   | done        |
 | Convolution animation               | To do         |
 | Post-effect images (all filters)    | To do         |
-| Sharpen formula (LaTeX/KaTeX)       | Optional      |
-| iOS demo video                      | To do         |
+| Sharpen formula (LaTeX/KaTeX)       | done      |
+| iOS demo video                      | done         |
 
 ---
 
