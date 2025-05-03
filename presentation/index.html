@@ -16,12 +16,23 @@
   <body>
     <div class="reveal">
       <div class="slides">
-        <!-- About Me Slide -->
+        <section>
+          <h2>Image Processing in the Browser with Nx</h2>
+          <p>
+            <small>
+              <a href="https://github.com/polvalente" target="_blank" rel="noopener noreferrer">
+                Paulo Valente
+                <br />
+                GitHub: @polvalente
+              </a>
+            </small>
+          </p>
+        </section>
         <section>
           <h2>About Me</h2>
           <ul>
             <li>Brazilian</li>
-            <li>Electronics and Computer Engineering @ UFRJ</li>
+            <li>Electronics and Computer Engineer (UFRJ)</li>
             <li>Software Engineer</li>
             <li>Elixir Enthusiast</li>
             <li>Nx and gRPC Core Team Member</li>
@@ -38,7 +49,6 @@
             <li>Kernel filters</li>
             <li>Uniform blur, Gaussian blur, Sharpen</li>
             <li>Live demo</li>
-            <li>iOS-embedded demo</li>
             <li>Conclusion</li>
           </ul>
         </section>
@@ -83,7 +93,7 @@ Example.my_fun(0.0, 1.57)
         <section>
           <h2>How computers represent images</h2>
           <img
-            src="../media/images/rgba_cube/rgba_cube.png"
+            src="images/rgba_cube/rgba_cube.png"
             alt="RGBA Cube"
             style="max-width: 100%; height: auto; background: white"
           />
@@ -110,30 +120,19 @@ Example.my_fun(0.0, 1.57)
         <!-- Kernel Filters Slide -->
         <section>
           <h2>Kernel filters</h2>
-          <div style="display: flex; gap: 2em; align-items: flex-start">
-            <div>
-              <strong>Visual:</strong>
-              <div style="margin-top: 1em; color: #888">
-                <em>TODO: manim render of a sharpen filter goes here</em>
-              </div>
-            </div>
-            <div>
-              <strong>Explanation:</strong>
-              <ul>
-                <li>
-                  A kernel filter is a small matrix used to transform images
-                </li>
-                <li>Common filters: blur, sharpen, edge detection</li>
-                <li>Each filter has a different kernel matrix</li>
-              </ul>
-            </div>
-          </div>
+          <ul>
+            <li>
+              A kernel filter is a small matrix used to transform images
+            </li>
+            <li>Common filters: blur, sharpen, edge detection</li>
+            <li>Each filter has a different kernel matrix</li>
+          </ul>
         </section>
         <!-- Uniform Blur Slide -->
         <section>
           <h2>Uniform Blur</h2>
           <img
-            src="../media/images/kernel_matrix/uniform_blur_kernel.png"
+            src="images/kernel_matrix/uniform_blur_kernel.png"
             alt="Uniform Blur Kernel"
             style="max-width: 100%; height: auto; background: white"
           />
@@ -142,7 +141,7 @@ Example.my_fun(0.0, 1.57)
         <section>
           <h2>Gaussian Blur</h2>
           <img
-            src="../media/images/kernel_matrix/gaussian_blur_kernel.png"
+            src="images/kernel_matrix/gaussian_blur_kernel.png"
             alt="Gaussian Blur Kernel"
             style="max-width: 100%; height: auto; background: white"
           />
@@ -155,7 +154,7 @@ Example.my_fun(0.0, 1.57)
           </div>
           <div style="overflow: hidden">
             <img
-              src="../media/images/sharpen_kernel/sharpen_kernel.png"
+              src="images/sharpen_kernel/sharpen_kernel.png"
               alt="Sharpen Kernel"
               style="
                 max-width: 100%;
@@ -205,8 +204,8 @@ Example.my_fun(0.0, 1.57)
         </section>
         <!-- iOS-embedded Demo Video Slide -->
         <section>
-          <h2>We can also deploy to iOS</h2>
-          <video controls width="800">
+          <h2>We can also run on the iPad!</h2>
+          <video controls width="700">
             <source src="videos/ios_demo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
@@ -223,6 +222,11 @@ Example.my_fun(0.0, 1.57)
             <li>Image filters are just matrix operations</li>
             <li>
               Interesting applications can arise from deploying Nx to the client
+            </li>
+            <li>
+              Code available on GitHub at
+              <br />
+              polvalente/code-beam-lite-nyc-2024
             </li>
           </ul>
         </section>
