@@ -153,6 +153,122 @@ Example.my_fun(0.0, 1.57)
             </div>
           </div>
         </section>
+        <!-- Kernel Filters Slide -->
+        <section>
+          <h2>Kernel filters</h2>
+          <div style="display: flex; gap: 2em; align-items: flex-start">
+            <div>
+              <strong>Visual:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: manim render of a sharpen filter goes here</em>
+              </div>
+            </div>
+            <div>
+              <strong>Explanation:</strong>
+              <ul>
+                <li>
+                  A kernel filter is a small matrix used to transform images
+                </li>
+                <li>Common filters: blur, sharpen, edge detection</li>
+                <li>Each filter has a different kernel matrix</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <!-- Uniform Blur Slide -->
+        <section>
+          <h2>Uniform Blur</h2>
+          <div style="display: flex; gap: 2em; align-items: flex-start">
+            <div>
+              <strong>Kernel:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: 7x7 uniform blur kernel matrix goes here</em>
+              </div>
+            </div>
+            <div>
+              <strong>Post-effect Image:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: post-effect image goes here</em>
+              </div>
+              <div style="margin-top: 1em">
+                <small>Same base image will be used for all effects</small>
+              </div>
+              <div style="margin-top: 1em">
+                <strong>Explanation:</strong>
+                <ul>
+                  <li>Uniform blur averages all pixels in the kernel region</li>
+                  <li>Results in a smooth, softened image</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Gaussian Blur Slide -->
+        <section>
+          <h2>Gaussian Blur</h2>
+          <div style="display: flex; gap: 2em; align-items: flex-start">
+            <div>
+              <strong>Kernel:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: 7x7 Gaussian blur kernel matrix goes here</em>
+              </div>
+            </div>
+            <div>
+              <strong>Post-effect Image:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: post-effect image goes here</em>
+              </div>
+              <div style="margin-top: 1em">
+                <small>Same base image will be used for all effects</small>
+              </div>
+              <div style="margin-top: 1em">
+                <strong>Explanation:</strong>
+                <ul>
+                  <li>
+                    Gaussian blur uses a weighted average, emphasizing the
+                    center
+                  </li>
+                  <li>Produces a more natural, photographic blur</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Sharpen Slide -->
+        <section>
+          <h2>Sharpen</h2>
+          <div style="display: flex; gap: 2em; align-items: flex-start">
+            <div>
+              <strong>Kernel:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: 7x7 sharpen kernel matrix goes here</em>
+              </div>
+              <div style="margin-top: 1em">
+                <strong>Formula:</strong>
+                <div style="font-family: monospace; color: #333">2 * I - K</div>
+                <div style="font-size: 0.9em; color: #888">
+                  (K is the Gaussian kernel from the previous slide)
+                </div>
+              </div>
+            </div>
+            <div>
+              <strong>Post-effect Image:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: post-effect image goes here</em>
+              </div>
+              <div style="margin-top: 1em">
+                <small>Same base image will be used for all effects</small>
+              </div>
+              <div style="margin-top: 1em">
+                <strong>Explanation:</strong>
+                <ul>
+                  <li>Sharpening enhances edges and fine details</li>
+                  <li>Formula: 2 × Image - GaussianBlur(Image)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
         <!-- Video Slide -->
         <section>
           <h2>Sample Video: Image Processing Demo</h2>

@@ -35,34 +35,34 @@
   - [x] Briefly explain convolution operation
   - [ ] Substitute placeholder with actual manim animation (kernel sliding over 4x4 matrix)
 
-- [ ] Kernel filters (introduce term, placeholder for sharpen filter render)
-  - [ ] Add slide introducing 'Kernel filters'
-  - [ ] Add placeholder for manim render of a sharpen filter
-  - [ ] Briefly explain what a kernel filter is
+- [x] Kernel filters (introduce term, placeholder for sharpen filter render)
+  - [x] Add slide introducing 'Kernel filters'
+  - [x] Add placeholder for manim render of a sharpen filter
+  - [x] Briefly explain what a kernel filter is
   - [ ] Substitute placeholder with actual manim render of a sharpen filter
 
-- [ ] Uniform blur (7x7 kernel, post-effect image placeholder)
-  - [ ] Add slide for 'Uniform Blur'
-  - [ ] Show 7x7 kernel matrix (placeholder)
-  - [ ] Add placeholder for post-effect image
-  - [ ] Add brief explanation
+- [x] Uniform blur (7x7 kernel, post-effect image placeholder)
+  - [x] Add slide for 'Uniform Blur'
+  - [x] Show 7x7 kernel matrix (placeholder)
+  - [x] Add placeholder for post-effect image
+  - [x] Add brief explanation
   - [ ] Substitute kernel matrix placeholder with actual 7x7 uniform blur kernel
   - [ ] Substitute post-effect image placeholder with actual image
 
-- [ ] Gaussian blur (7x7 kernel, post-effect image placeholder)
-  - [ ] Add slide for 'Gaussian Blur'
-  - [ ] Show 7x7 Gaussian kernel matrix (placeholder)
-  - [ ] Add placeholder for post-effect image
-  - [ ] Add brief explanation
+- [x] Gaussian blur (7x7 kernel, post-effect image placeholder)
+  - [x] Add slide for 'Gaussian Blur'
+  - [x] Show 7x7 Gaussian kernel matrix (placeholder)
+  - [x] Add placeholder for post-effect image
+  - [x] Add brief explanation
   - [ ] Substitute kernel matrix placeholder with actual 7x7 Gaussian blur kernel
   - [ ] Substitute post-effect image placeholder with actual image
 
-- [ ] Sharpen (7x7 kernel, post-effect image, formula 2 * I - K)
-  - [ ] Add slide for 'Sharpen'
-  - [ ] Show 7x7 kernel matrix (placeholder)
-  - [ ] Add placeholder for post-effect image
-  - [ ] Display formula: 2 * I - K (with K as the Gaussian kernel)
-  - [ ] Add brief explanation
+- [x] Sharpen (7x7 kernel, post-effect image, formula 2 * I - K)
+  - [x] Add slide for 'Sharpen'
+  - [x] Show 7x7 kernel matrix (placeholder)
+  - [x] Add placeholder for post-effect image
+  - [x] Display formula: 2 * I - K (with K as the Gaussian kernel)
+  - [x] Add brief explanation
   - [ ] Substitute kernel matrix placeholder with actual 7x7 sharpen kernel
   - [ ] Substitute post-effect image placeholder with actual image
 
