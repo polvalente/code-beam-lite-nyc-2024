@@ -12,6 +12,29 @@
     />
     <!-- MathJax for LaTeX rendering -->
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/elixir.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      });
+    </script>
+    <style>
+      .reveal .slide-number {
+        left: 16px !important;
+        right: auto !important;
+        bottom: 16px !important;
+        font-size: 1em !important;
+        background: rgba(0,0,0,0.5) !important;
+        color: #fff !important;
+        padding: 10px 18px !important;
+        border-radius: 8px !important;
+      }
+    </style>
   </head>
   <body>
     <div class="reveal">
@@ -76,7 +99,7 @@
         </section>
         <!-- Nx Function Example Slide -->
         <section>
-          <h2>Nx Example: add(cos(x), sin(y))</h2>
+          <h2>Nx Example Code</h2>
           <pre><code class="language-elixir">defmodule Example do
   import Nx.Defn
 
@@ -85,9 +108,34 @@
   end
 end
 
-# Example call:
+# Example calls:
 Example.my_fun(0.0, 1.57)
+Example.my_fun(Nx.tensor([0.0, 1.57]), Nx.tensor([1.0, 2.0]))
+Example.my_fun(Nx.tensor([0.0, 1.57]), 10)
 </code></pre>
+        </section>
+        <section>
+          <h2>How Nx works</h2>
+          <ul>
+            <li>Nx provides functions to create and manipulate tensors</li>
+            <li>These functions will internally generate a computation graph, a nested Nx.Defn.Expr struct</li>
+            <li>When you call the function, it will execute the Defn expression</li>
+            <li>Configurable compilers will be able to target different devices</li>
+          </ul>
+        </section>
+        <section>
+          <h2>How Nx works</h2>
+          <ul>
+            <li>Nx.Defn.Expr allows us to compile the Nx code at Elixir runtime</li>
+            <li>The code can then be deployed to:
+              <ul>
+                <li>GPU</li>
+                <li>CPU</li>
+                <li>Browser, via WASM</li>
+                <li>iOS, via LiveView Native</li>
+              </ul>
+            </li>
+          </ul>
         </section>
         <!-- How computers represent images Slide -->
         <section>
@@ -97,6 +145,14 @@ Example.my_fun(0.0, 1.57)
             alt="RGBA Cube"
             style="max-width: 100%; height: auto; background: white"
           />
+        </section>
+        <section>
+          <h2>How computers represent images</h2>
+          <ul>
+            <li>Each color in the cube we saw is called a channel</li>
+            <li>In RGBA one pixel has 4 channels: R, G, B, and A</li>
+            <li>There are other formats with more or less channels (e.g. grayscale)</li>
+          </ul>
         </section>
         <!-- Convolution Slide -->
         <section>
@@ -248,7 +304,9 @@ Example.my_fun(0.0, 1.57)
     </div>
     <script src="node_modules/reveal.js/dist/reveal.js"></script>
     <script>
-      Reveal.initialize();
+      Reveal.initialize({
+        slideNumber: 'c/t'
+      });
       // Configurable link URL via query param
       function getQueryParam(name) {
         const url = new URL(window.location.href);
