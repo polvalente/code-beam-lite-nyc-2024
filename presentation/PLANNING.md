@@ -1,12 +1,12 @@
 # Presentation Planning Checklist
 
-- [ ] Switch Reveal.js to light mode (white theme)
-  - [ ] Change theme link in HTML to use 'white.css'
-  - [ ] Verify appearance and contrast
+- [x] Switch Reveal.js to light mode (white theme)
+  - [x] Change theme link in HTML to use 'white.css'
+  - [x] Verify appearance and contrast
 
-- [ ] Introduction slide (general topics)
-  - [ ] Add slide with title 'Introduction'
-  - [ ] List all main topics to be covered
+- [x] Introduction slide (general topics)
+  - [x] Add slide with title 'Introduction'
+  - [x] List all main topics to be covered
 
 - [ ] What are matrices? (placeholder for manim static rendering)
   - [ ] Add slide with title 'What are matrices?'
