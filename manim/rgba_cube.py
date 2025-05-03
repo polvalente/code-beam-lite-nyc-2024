@@ -1,28 +1,36 @@
 from manim import *
+from manim.mobject.three_d.three_dimensions import Prism
 
-class RGBACube(Scene):
+class RGBACube(ThreeDScene):
     def construct(self):
+        self.camera.background_color = WHITE
+        self.set_camera_orientation(phi=-PI/8, theta=-PI/2)
+        self.camera.set_zoom(0.85)
         # Define soft colors for RGBA
-        soft_red = "#ffb3b3"
-        soft_green = "#b3ffb3"
-        soft_blue = "#b3b3ff"
-        soft_alpha = "#dddddd"
+        soft_red = "#ff9999"
+        soft_green = "#99ff99"
+        soft_blue = "#9999ff"
+        soft_alpha = "#999999"
+        colors = [soft_red, soft_green, soft_blue, soft_alpha]
+        labels = [r"R", r"G", r"B", r"\alpha"]
+        label_colors = [BLACK, BLACK, BLACK, BLACK]
 
-        # Create 4 transparent cubes for RGBA layers
-        cube_r = Cube(side_length=2, fill_color=soft_red, fill_opacity=0.7, stroke_color=BLACK).shift(LEFT*0.3+UP*0.3+OUT*0.3)
-        cube_g = Cube(side_length=2, fill_color=soft_green, fill_opacity=0.7, stroke_color=BLACK).shift(RIGHT*0.3+UP*0.3+OUT*0.3)
-        cube_b = Cube(side_length=2, fill_color=soft_blue, fill_opacity=0.7, stroke_color=BLACK).shift(LEFT*0.3+DOWN*0.3+IN*0.3)
-        cube_a = Cube(side_length=2, fill_color=soft_alpha, fill_opacity=0.5, stroke_color=BLACK).shift(RIGHT*0.3+DOWN*0.3+IN*0.3)
+        prisms = []
+        label_mobs = []
+        order = [0, 1, 2, 3]  # R, G, B, alpha
+        for i in order:
+            color = colors[i]
+            label = labels[i]
+            lcolor = label_colors[i]
+            prism = Prism(dimensions=[1.75, 6, 6], fill_color=color, fill_opacity=1, stroke_color="#444444", stroke_width=1)
+            prism.shift(RIGHT * (i - 2) * 2)
+            prisms.append(prism)
+            # Center label on front face, offset slightly outward
+            front_face_center = prism.get_center() + OUT * (prism.depth / 2)
+            label_mob = MathTex(label, color=lcolor, font_size=72).move_to(front_face_center)
+            label_mobs.append(label_mob)
 
-        # Group and rotate to show 3 faces
-        group = VGroup(cube_r, cube_g, cube_b, cube_a)
-        group.rotate(PI/6, axis=RIGHT)
-        group.rotate(-PI/6, axis=UP)
-
-        # Add RGBA labels
-        label_r = Text("R", color=RED).next_to(cube_r, OUT)
-        label_g = Text("G", color=GREEN).next_to(cube_g, OUT)
-        label_b = Text("B", color=BLUE).next_to(cube_b, OUT)
-        label_a = Text("A", color=BLACK).next_to(cube_a, OUT)
-
-        self.add(group, label_r, label_g, label_b, label_a)
+        group = VGroup(*list(reversed(prisms)), *list(reversed(label_mobs)))
+        group.rotate(PI/6, axis=UP)
+        group.shift(UP * 0.5)
+        self.add(group)
