@@ -66,20 +66,20 @@
   - [ ] Substitute kernel matrix placeholder with actual 7x7 sharpen kernel
   - [ ] Substitute post-effect image placeholder with actual image
 
-- [ ] Live demo link slide
-  - [ ] Ensure slide with live demo link is present
-  - [ ] Make link configurable via query param
-  - [ ] Add clear instructions for accessing the demo
+- [x] Live demo link slide
+  - [x] Ensure slide with live demo link is present
+  - [x] Make link configurable via query param
+  - [x] Add clear instructions for accessing the demo
 
-- [ ] iOS-embedded demo video slide
-  - [ ] Add slide with embedded video for iOS demo
-  - [ ] Update title and description for clarity
+- [x] iOS-embedded demo video slide
+  - [x] Add slide with embedded video for iOS demo
+  - [x] Update title and description for clarity
   - [ ] Substitute video placeholder with actual iOS-embedded demo video
 
-- [ ] Conclusion slide
-  - [ ] Add slide summarizing key points
-  - [ ] Optionally add next steps or further reading
+- [x] Conclusion slide
+  - [x] Add slide summarizing key points
+  - [x] Optionally add next steps or further reading
 
-- [ ] Thank you slide
-  - [ ] Add closing slide with 'Thank you' message
-  - [ ] Optionally add contact info or Q&A prompt
+- [x] Thank you slide
+  - [x] Add closing slide with 'Thank you' message
+  - [x] Optionally add contact info or Q&A prompt

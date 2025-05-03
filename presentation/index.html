@@ -269,21 +269,7 @@ Example.my_fun(0.0, 1.57)
             </div>
           </div>
         </section>
-        <!-- Video Slide -->
-        <section>
-          <h2>Sample Video: Image Processing Demo</h2>
-          <video controls width="800">
-            <source src="videos/sample.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <p>
-            <small
-              >Replace <code>sample.mp4</code> with your own video in the
-              <code>videos/</code> folder.</small
-            >
-          </p>
-        </section>
-        <!-- IFrame Slide (now a link) -->
+        <!-- Live Demo Slide -->
         <section>
           <h2>Live demo time!</h2>
           <a
@@ -303,8 +289,7 @@ Example.my_fun(0.0, 1.57)
               gap: 0.5em;
             "
           >
-            <span>Open</span>
-            <!-- Heroicons: external-link -->
+            <span>Open Livebook Demo</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -320,6 +305,49 @@ Example.my_fun(0.0, 1.57)
               />
             </svg>
           </a>
+          <div style="margin-top: 1em">
+            <small>
+              The link above can be configured via
+              <code>?iframe_url=YOUR_URL</code> in the browser address bar.<br />
+              Example: <code>index.html?iframe_url=http://localhost:1234</code>
+            </small>
+          </div>
+        </section>
+        <!-- iOS-embedded Demo Video Slide -->
+        <section>
+          <h2>iOS-embedded Demo</h2>
+          <video controls width="800">
+            <source src="videos/sample.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <p>
+            <small>
+              This video demonstrates the image processing demo running natively
+              on iOS.<br />
+              Replace <code>sample.mp4</code> with your own video in the
+              <code>videos/</code> folder.
+            </small>
+          </p>
+        </section>
+        <!-- Conclusion Slide -->
+        <section>
+          <h2>Conclusion</h2>
+          <ul>
+            <li>Matrices and kernels are fundamental to image processing</li>
+            <li>Nx brings fast, flexible numerical computing to Elixir</li>
+            <li>Image filters are just matrix operations</li>
+            <li>Live demos and native apps make it real!</li>
+          </ul>
+        </section>
+        <!-- Thank You Slide -->
+        <section>
+          <h2>Thank you!</h2>
+          <p>
+            Questions? <br />
+            <span style="font-size: 0.8em; color: #888"
+              >(Or reach out later: paulo@valente.dev)</span
+            >
+          </p>
         </section>
       </div>
     </div>
