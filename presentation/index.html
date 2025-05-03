@@ -40,6 +40,66 @@
             <li>Conclusion</li>
           </ul>
         </section>
+        <!-- What are matrices? Slide -->
+        <section>
+          <h2>What are matrices?</h2>
+          <div style="display: flex; gap: 2em; align-items: flex-start">
+            <div>
+              <strong>Visuals:</strong>
+              <ul>
+                <li>
+                  Number: <span style="font-family: monospace">3.14</span>
+                </li>
+                <li>
+                  Vector: <span style="font-family: monospace">[1, 2, 3]</span>
+                </li>
+                <li>
+                  Matrix:
+                  <span style="font-family: monospace">[[1, 2], [3, 4]]</span>
+                </li>
+              </ul>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: manim static rendering goes here</em>
+              </div>
+            </div>
+            <div>
+              <strong>Explanation:</strong>
+              <ul>
+                <li><b>Number</b>: a single value (scalar)</li>
+                <li><b>Vector</b>: a 1D array of numbers</li>
+                <li><b>Matrix</b>: a 2D array of numbers</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <!-- What is Nx? Slide -->
+        <section>
+          <h2>What is Nx?</h2>
+          <ul>
+            <li>Numerical computing library for Elixir</li>
+            <li>Inspired by NumPy, JAX, and TensorFlow</li>
+            <li>Enables fast, multi-dimensional array operations</li>
+            <li>Supports CPU, GPU, and distributed computation</li>
+            <li>
+              Foundation for machine learning and scientific computing in Elixir
+            </li>
+          </ul>
+        </section>
+        <!-- Nx Function Example Slide -->
+        <section>
+          <h2>Nx Example: add(cos(x), sin(y))</h2>
+          <pre><code class="language-elixir">defmodule Example do
+  import Nx.Defn
+
+  defn my_fun(x, y) do
+    Nx.add(Nx.cos(x), Nx.sin(y))
+  end
+end
+
+# Example call:
+Example.my_fun(0.0, 1.57)
+</code></pre>
+        </section>
         <!-- Video Slide -->
         <section>
           <h2>Sample Video: Image Processing Demo</h2>

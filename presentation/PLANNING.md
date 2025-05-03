@@ -8,20 +8,20 @@
   - [x] Add slide with title 'Introduction'
   - [x] List all main topics to be covered
 
-- [ ] What are matrices? (placeholder for manim static rendering)
-  - [ ] Add slide with title 'What are matrices?'
-  - [ ] Add placeholder for manim static rendering (number, vector, matrix)
-  - [ ] Add brief explanation of each (number, vector, matrix)
+- [x] What are matrices? (placeholder for manim static rendering)
+  - [x] Add slide with title 'What are matrices?'
+  - [x] Add placeholder for manim static rendering (number, vector, matrix)
+  - [x] Add brief explanation of each (number, vector, matrix)
   - [ ] Substitute placeholder with actual manim static rendering (number, vector, matrix)
 
-- [ ] What is Nx? (brief description)
-  - [ ] Add slide with title 'What is Nx?'
-  - [ ] Write a brief, topic-based description of Nx
+- [x] What is Nx? (brief description)
+  - [x] Add slide with title 'What is Nx?'
+  - [x] Write a brief, topic-based description of Nx
 
-- [ ] Nx function example (Elixir code: add(cos(x), sin(y)))
-  - [ ] Add slide with Elixir code block for add(cos(x), sin(y))
-  - [ ] Add example function call
-  - [ ] Ensure syntax highlighting for Elixir
+- [x] Nx function example (Elixir code: add(cos(x), sin(y)))
+  - [x] Add slide with Elixir code block for add(cos(x), sin(y))
+  - [x] Add example function call
+  - [x] Ensure syntax highlighting for Elixir
 
 - [ ] How computers represent images (placeholder for RGBA cube manim render)
   - [ ] Add slide with title 'How computers represent images'
