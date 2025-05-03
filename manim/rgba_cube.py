@@ -5,7 +5,7 @@ class RGBACube(ThreeDScene):
     def construct(self):
         self.camera.background_color = WHITE
         self.set_camera_orientation(phi=-PI/8, theta=-PI/2)
-        self.camera.set_zoom(0.85)
+        self.camera.set_zoom(0.8)
         # Define soft colors for RGBA
         soft_red = "#ff9999"
         soft_green = "#99ff99"
