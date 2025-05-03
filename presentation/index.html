@@ -100,6 +100,59 @@ end
 Example.my_fun(0.0, 1.57)
 </code></pre>
         </section>
+        <!-- How computers represent images Slide -->
+        <section>
+          <h2>How computers represent images</h2>
+          <div style="display: flex; gap: 2em; align-items: flex-start">
+            <div>
+              <strong>Visual:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em>TODO: manim static RGBA cube rendering goes here</em>
+              </div>
+            </div>
+            <div>
+              <strong>Explanation:</strong>
+              <ul>
+                <li>
+                  Images are represented as 3D arrays (height × width ×
+                  channels)
+                </li>
+                <li>Each channel (R, G, B, A) is a matrix of values</li>
+                <li>Stacking these matrices forms the full image</li>
+                <li>RGBA: Red, Green, Blue, Alpha (transparency)</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <!-- Convolution Slide -->
+        <section>
+          <h2>Convolution</h2>
+          <div style="display: flex; gap: 2em; align-items: flex-start">
+            <div>
+              <strong>Visual:</strong>
+              <div style="margin-top: 1em; color: #888">
+                <em
+                  >TODO: manim animation of kernel sliding over 4x4 matrix goes
+                  here</em
+                >
+              </div>
+            </div>
+            <div>
+              <strong>Explanation:</strong>
+              <ul>
+                <li>
+                  Convolution applies a small matrix (kernel) to each region of
+                  the image
+                </li>
+                <li>
+                  Each output value is a weighted sum of neighboring pixels
+                </li>
+                <li>Used for edge detection, blurring, sharpening, etc.</li>
+                <li>Often uses zero-padding to keep output size consistent</li>
+              </ul>
+            </div>
+          </div>
+        </section>
         <!-- Video Slide -->
         <section>
           <h2>Sample Video: Image Processing Demo</h2>

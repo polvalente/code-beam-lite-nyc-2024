@@ -23,16 +23,16 @@
   - [x] Add example function call
   - [x] Ensure syntax highlighting for Elixir
 
-- [ ] How computers represent images (placeholder for RGBA cube manim render)
-  - [ ] Add slide with title 'How computers represent images'
-  - [ ] Add placeholder for manim static RGBA cube rendering
-  - [ ] Add explanation of RGBA channels as matrices
+- [x] How computers represent images (placeholder for RGBA cube manim render)
+  - [x] Add slide with title 'How computers represent images'
+  - [x] Add placeholder for manim static RGBA cube rendering
+  - [x] Add explanation of RGBA channels as matrices
   - [ ] Substitute placeholder with actual manim static RGBA cube rendering
 
-- [ ] Convolution (placeholder for manim animation)
-  - [ ] Add slide with title 'Convolution'
-  - [ ] Add placeholder for manim animation (kernel sliding over 4x4 matrix)
-  - [ ] Briefly explain convolution operation
+- [x] Convolution (placeholder for manim animation)
+  - [x] Add slide with title 'Convolution'
+  - [x] Add placeholder for manim animation (kernel sliding over 4x4 matrix)
+  - [x] Briefly explain convolution operation
   - [ ] Substitute placeholder with actual manim animation (kernel sliding over 4x4 matrix)
 
 - [ ] Kernel filters (introduce term, placeholder for sharpen filter render)
