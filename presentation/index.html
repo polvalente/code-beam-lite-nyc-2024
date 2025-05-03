@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Image Processing in the Browser with Nx</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css" />
+    <link
+      rel="stylesheet"
+      href="node_modules/reveal.js/dist/theme/white.css"
+      id="theme"
+    />
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/elixir.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      });
+    </script>
+    <style>
+      .reveal .slide-number {
+        left: 16px !important;
+        right: auto !important;
+        bottom: 16px !important;
+        font-size: 1em !important;
+        background: rgba(0,0,0,0.5) !important;
+        color: #fff !important;
+        padding: 10px 18px !important;
+        border-radius: 8px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h2>Image Processing in the Browser with Nx</h2>
+          <p>
+            <small>
+              <a href="https://github.com/polvalente" target="_blank" rel="noopener noreferrer">
+                Paulo Valente
+                <br />
+                GitHub: @polvalente
+              </a>
+            </small>
+          </p>
+        </section>
+        <section>
+          <h2>About Me</h2>
+          <ul>
+            <li>Brazilian</li>
+            <li>Electronics and Computer Engineer (UFRJ)</li>
+            <li>Software Engineer</li>
+            <li>Elixir Enthusiast</li>
+            <li>Nx and gRPC Core Team Member</li>
+          </ul>
+        </section>
+        <!-- Introduction Slide -->
+        <section>
+          <h2>Introduction</h2>
+          <ul>
+            <li>What are matrices?</li>
+            <li>What is Nx?</li>
+            <li>How computers represent images</li>
+            <li>Convolution</li>
+            <li>Kernel filters</li>
+            <li>Uniform blur, Gaussian blur, Sharpen</li>
+            <li>Live demo</li>
+            <li>Conclusion</li>
+          </ul>
+        </section>
+        <!-- What are matrices? Slide -->
+        <section>
+          <h2>What are matrices?</h2>
+          <div style="font-size: 1.3em; color: #333">
+            \[ \text{Number:}\quad 3.14 \] \[ \text{Vector:}\quad
+            \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} \] \[ \text{Matrix:}\quad
+            \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix} \]
+          </div>
+        </section>
+        <!-- What is Nx? Slide -->
+        <section>
+          <h2>What is Nx?</h2>
+          <ul>
+            <li>Numerical computing library for Elixir</li>
+            <li>Inspired by NumPy, JAX, and TensorFlow</li>
+            <li>Enables fast, multi-dimensional array operations</li>
+            <li>Supports CPU, GPU, and distributed computation</li>
+            <li>
+              Foundation for machine learning and scientific computing in Elixir
+            </li>
+          </ul>
+        </section>
+        <!-- Nx Function Example Slide -->
+        <section>
+          <h2>Nx Example Code</h2>
+          <pre><code class="language-elixir">defmodule Example do
+  import Nx.Defn
+
+  defn my_fun(x, y) do
+    Nx.add(Nx.cos(x), Nx.sin(y))
+  end
+end
+
+# Example calls:
+Example.my_fun(0.0, 1.57)
+Example.my_fun(Nx.tensor([0.0, 1.57]), Nx.tensor([1.0, 2.0]))
+Example.my_fun(Nx.tensor([0.0, 1.57]), 10)
+</code></pre>
+        </section>
+        <section>
+          <h2>How Nx works</h2>
+          <ul>
+            <li>Nx provides functions to create and manipulate tensors</li>
+            <li>These functions will internally generate a computation graph, a nested Nx.Defn.Expr struct</li>
+            <li>When you call the function, it will execute the Defn expression</li>
+            <li>Configurable compilers will be able to target different devices</li>
+          </ul>
+        </section>
+        <section>
+          <h2>How Nx works</h2>
+          <ul>
+            <li>Nx.Defn.Expr allows us to compile the Nx code at Elixir runtime</li>
+            <li>The code can then be deployed to:
+              <ul>
+                <li>GPU</li>
+                <li>CPU</li>
+                <li>Browser, via WASM</li>
+                <li>iOS, via LiveView Native</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <!-- How computers represent images Slide -->
+        <section>
+          <h2>How computers represent images</h2>
+          <img
+            src="images/rgba_cube/rgba_cube.png"
+            alt="RGBA Cube"
+            style="max-width: 100%; height: auto; background: white"
+          />
+        </section>
+        <section>
+          <h2>How computers represent images</h2>
+          <ul>
+            <li>Each color in the cube we saw is called a channel</li>
+            <li>In RGBA one pixel has 4 channels: R, G, B, and A</li>
+            <li>There are other formats with more or less channels (e.g. grayscale)</li>
+          </ul>
+        </section>
+        <!-- Convolution Slide -->
+        <section>
+          <h2>Convolution</h2>
+          <ul>
+            <li>
+              Convolution applies a small matrix (kernel) to each region of the
+              input, sliding the kernel over the input
+            </li>
+            <li>Each output value is a weighted sum of neighboring pixels</li>
+            <li>Used for edge detection, blurring, sharpening, etc.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Convolution</h2>
+          <video controls width="100%">
+            <source src="videos/ConvolutionAnimation.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </section>
+        <!-- Kernel Filters Slide -->
+        <section>
+          <h2>Kernel filters</h2>
+          <ul>
+            <li>
+              A kernel filter is a small matrix used to transform images
+            </li>
+            <li>Common filters: blur, sharpen, edge detection</li>
+            <li>Each filter has a different kernel matrix</li>
+          </ul>
+        </section>
+        <!-- Uniform Blur Slide -->
+        <section>
+          <h2>Uniform Blur</h2>
+          <img
+            src="images/kernel_matrix/uniform_blur_kernel.png"
+            alt="Uniform Blur Kernel"
+            style="max-width: 100%; height: auto; background: white"
+          />
+        </section>
+        <!-- Gaussian Blur Slide -->
+        <section>
+          <h2>Gaussian Blur</h2>
+          <img
+            src="images/kernel_matrix/gaussian_blur_kernel.png"
+            alt="Gaussian Blur Kernel"
+            style="max-width: 100%; height: auto; background: white"
+          />
+        </section>
+        <!-- Sharpen Slide -->
+        <section>
+          <h2>Sharpen</h2>
+          <div style="padding-top: 4rem; font-size: 0.5em; color: #333">
+            \[ \text{Formula:}\quad 2 \times \delta - \text{Blur Kernel} \]
+          </div>
+          <div style="overflow: hidden">
+            <img
+              src="images/sharpen_kernel/sharpen_kernel.png"
+              alt="Sharpen Kernel"
+              style="
+                max-width: 100%;
+                background: white;
+                transform: translateY(-20%) scale(1.1);
+                display: block;
+              "
+            />
+          </div>
+        </section>
+        <!-- Live Demo Slide -->
+        <section>
+          <h2>Live demo time!</h2>
+          <a
+            id="link"
+            href="http://127.0.0.1:4000/image_processing"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display: inline-flex;
+              align-items: center;
+              font-size: 1.5em;
+              text-decoration: none;
+              color: #3b82f6;
+              border: 2px solid #3b82f6;
+              border-radius: 8px;
+              padding: 0.5em 1em;
+              gap: 0.5em;
+            "
+          >
+            <span>Open</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              style="width: 1.5em; height: 1.5em"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M18 13.5V18.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10.5M15.75 3H21m0 0v5.25M21 3l-9.75 9.75"
+              />
+            </svg>
+          </a>
+        </section>
+        <!-- iOS-embedded Demo Video Slide -->
+        <section>
+          <h2>We can also run on the iPad!</h2>
+          <video controls width="700">
+            <source src="videos/ios_demo.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <p>
+            <small> Nx running on-device with LiveView Native </small>
+          </p>
+        </section>
+        <!-- Conclusion Slide -->
+        <section>
+          <h2>Conclusion</h2>
+          <ul>
+            <li>Matrices and kernels are fundamental to image processing</li>
+            <li>Nx brings fast, flexible numerical computing to Elixir</li>
+            <li>Image filters are just matrix operations</li>
+            <li>
+              Interesting applications can arise from deploying Nx to the client
+            </li>
+            <li>
+              Code available on GitHub at
+              <br />
+              polvalente/code-beam-lite-nyc-2024
+            </li>
+          </ul>
+        </section>
+        <!-- Thank You Slide -->
+        <section>
+          <h2>Thank you!</h2>
+          <p>
+            Questions? <br />
+            <p style="font-size: 0.8em; color: #888">
+              Or reach out later:
+              <br />
+              X and GitHub: @polvalente
+              <br />
+              BlueSky: @polvalente.social
+            </p>
+          </p>
+        </section>
+      </div>
+    </div>
+    <script src="node_modules/reveal.js/dist/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+        slideNumber: 'c/t'
+      });
+      // Configurable link URL via query param
+      function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+      }
+      const livebookUrl = getQueryParam("iframe_url");
+      if (livebookUrl) {
+        document.getElementById("livebook-link").href = livebookUrl;
+      }
+    </script>
+  </body>
+</html>

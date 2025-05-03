@@ -2,27 +2,32 @@ defmodule BeamstagramWeb.Router do
   use BeamstagramWeb, :router
 
   pipeline :browser do
-    plug :accepts, [
+    plug(:accepts, [
       "html",
       "swiftui"
-    ]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout,
+    ])
+
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+
+    plug(:put_root_layout,
       html: {BeamstagramWeb.Layouts, :root},
       swiftui: {BeamstagramWeb.Layouts.SwiftUI, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    )
+
+    plug(:protect_from_forgery)
+
+    plug(:put_secure_browser_headers, %{"x-frame-options" => "ALLOWALL"})
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", BeamstagramWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    live "/image_processing", ImageProcessingLive
+    live("/image_processing", ImageProcessingLive)
   end
 
   # Other scopes may use custom stacks.
@@ -40,10 +45,10 @@ defmodule BeamstagramWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      live_dashboard "/dashboard", metrics: BeamstagramWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      live_dashboard("/dashboard", metrics: BeamstagramWeb.Telemetry)
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end
