@@ -10,6 +10,8 @@
       href="node_modules/reveal.js/dist/theme/white.css"
       id="theme"
     />
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
   <body>
     <div class="reveal">
@@ -43,33 +45,10 @@
         <!-- What are matrices? Slide -->
         <section>
           <h2>What are matrices?</h2>
-          <div style="display: flex; gap: 2em; align-items: flex-start">
-            <div>
-              <strong>Visuals:</strong>
-              <ul>
-                <li>
-                  Number: <span style="font-family: monospace">3.14</span>
-                </li>
-                <li>
-                  Vector: <span style="font-family: monospace">[1, 2, 3]</span>
-                </li>
-                <li>
-                  Matrix:
-                  <span style="font-family: monospace">[[1, 2], [3, 4]]</span>
-                </li>
-              </ul>
-              <div style="margin-top: 1em; color: #888">
-                <em>TODO: manim static rendering goes here</em>
-              </div>
-            </div>
-            <div>
-              <strong>Explanation:</strong>
-              <ul>
-                <li><b>Number</b>: a single value (scalar)</li>
-                <li><b>Vector</b>: a 1D array of numbers</li>
-                <li><b>Matrix</b>: a 2D array of numbers</li>
-              </ul>
-            </div>
+          <div style="font-size: 1.3em; color: #333">
+            \[ \text{Number:}\quad 3.14 \] \[ \text{Vector:}\quad
+            \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} \] \[ \text{Matrix:}\quad
+            \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix} \]
           </div>
         </section>
         <!-- What is Nx? Slide -->
@@ -103,33 +82,11 @@ Example.my_fun(0.0, 1.57)
         <!-- How computers represent images Slide -->
         <section>
           <h2>How computers represent images</h2>
-          <div style="display: flex; gap: 2em; align-items: flex-start">
-            <div>
-              <strong>Visual:</strong>
-              <img
-                src="../media/images/rgba_cube/rgba_cube.png"
-                alt="RGBA Cube"
-                style="
-                  max-width: 100%;
-                  height: auto;
-                  background: white;
-                  border: 1px solid #ccc;
-                "
-              />
-            </div>
-            <div>
-              <strong>Explanation:</strong>
-              <ul>
-                <li>
-                  Images are represented as 3D arrays (height × width ×
-                  channels)
-                </li>
-                <li>Each channel (R, G, B, A) is a matrix of values</li>
-                <li>Stacking these matrices forms the full image</li>
-                <li>RGBA: Red, Green, Blue, Alpha (transparency)</li>
-              </ul>
-            </div>
-          </div>
+          <img
+            src="../media/images/rgba_cube/rgba_cube.png"
+            alt="RGBA Cube"
+            style="max-width: 100%; height: auto; background: white"
+          />
         </section>
         <!-- Convolution Slide -->
         <section>
@@ -185,123 +142,45 @@ Example.my_fun(0.0, 1.57)
         <!-- Uniform Blur Slide -->
         <section>
           <h2>Uniform Blur</h2>
-          <div style="display: flex; gap: 2em; align-items: flex-start">
-            <div>
-              <strong>Kernel:</strong>
-              <img
-                src="../media/images/kernel_matrix/uniform_blur_kernel.png"
-                alt="Uniform Blur Kernel"
-                style="
-                  max-width: 100%;
-                  height: auto;
-                  background: white;
-                  border: 1px solid #ccc;
-                "
-              />
-            </div>
-            <div>
-              <strong>Post-effect Image:</strong>
-              <div style="margin-top: 1em; color: #888">
-                <em>TODO: post-effect image goes here</em>
-              </div>
-              <div style="margin-top: 1em">
-                <small>Same base image will be used for all effects</small>
-              </div>
-              <div style="margin-top: 1em">
-                <strong>Explanation:</strong>
-                <ul>
-                  <li>Uniform blur averages all pixels in the kernel region</li>
-                  <li>Results in a smooth, softened image</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <img
+            src="../media/images/kernel_matrix/uniform_blur_kernel.png"
+            alt="Uniform Blur Kernel"
+            style="max-width: 100%; height: auto; background: white"
+          />
         </section>
         <!-- Gaussian Blur Slide -->
         <section>
           <h2>Gaussian Blur</h2>
-          <div style="display: flex; gap: 2em; align-items: flex-start">
-            <div>
-              <strong>Kernel:</strong>
-              <img
-                src="../media/images/kernel_matrix/gaussian_blur_kernel.png"
-                alt="Gaussian Blur Kernel"
-                style="
-                  max-width: 100%;
-                  height: auto;
-                  background: white;
-                  border: 1px solid #ccc;
-                "
-              />
-            </div>
-            <div>
-              <strong>Post-effect Image:</strong>
-              <div style="margin-top: 1em; color: #888">
-                <em>TODO: post-effect image goes here</em>
-              </div>
-              <div style="margin-top: 1em">
-                <small>Same base image will be used for all effects</small>
-              </div>
-              <div style="margin-top: 1em">
-                <strong>Explanation:</strong>
-                <ul>
-                  <li>
-                    Gaussian blur uses a weighted average, emphasizing the
-                    center
-                  </li>
-                  <li>Produces a more natural, photographic blur</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <img
+            src="../media/images/kernel_matrix/gaussian_blur_kernel.png"
+            alt="Gaussian Blur Kernel"
+            style="max-width: 100%; height: auto; background: white"
+          />
         </section>
         <!-- Sharpen Slide -->
         <section>
           <h2>Sharpen</h2>
-          <div style="display: flex; gap: 2em; align-items: flex-start">
-            <div>
-              <strong>Kernel:</strong>
-              <img
-                src="../media/images/sharpen_kernel/sharpen_kernel.png"
-                alt="Sharpen Kernel"
-                style="
-                  max-width: 100%;
-                  height: auto;
-                  background: white;
-                  border: 1px solid #ccc;
-                "
-              />
-              <div style="margin-top: 1em">
-                <strong>Formula:</strong>
-                <div style="font-family: monospace; color: #333">2 * I - K</div>
-                <div style="font-size: 0.9em; color: #888">
-                  (K is the Gaussian kernel from the previous slide)
-                </div>
-              </div>
-            </div>
-            <div>
-              <strong>Post-effect Image:</strong>
-              <div style="margin-top: 1em; color: #888">
-                <em>TODO: post-effect image goes here</em>
-              </div>
-              <div style="margin-top: 1em">
-                <small>Same base image will be used for all effects</small>
-              </div>
-              <div style="margin-top: 1em">
-                <strong>Explanation:</strong>
-                <ul>
-                  <li>Sharpening enhances edges and fine details</li>
-                  <li>Formula: 2 × Image - GaussianBlur(Image)</li>
-                </ul>
-              </div>
-            </div>
+          <div style="padding-top: 4rem; font-size: 0.5em; color: #333">
+            \[ \text{Formula:}\quad 2 \times \delta - \text{Blur Kernel} \]
+          </div>
+          <div style="overflow: hidden">
+            <img
+              src="../media/images/sharpen_kernel/sharpen_kernel.png"
+              alt="Sharpen Kernel"
+              style="
+                max-width: 100%;
+                background: white;
+                transform: translateY(-20%) scale(1.1);
+                display: block;
+              "
+            />
           </div>
         </section>
         <!-- Live Demo Slide -->
         <section>
           <h2>Live demo time!</h2>
           <a
-            id="livebook-link"
+            id="link"
             href="http://127.0.0.1:4000/image_processing"
             target="_blank"
             rel="noopener noreferrer"
@@ -317,7 +196,7 @@ Example.my_fun(0.0, 1.57)
               gap: 0.5em;
             "
           >
-            <span>Open Livebook Demo</span>
+            <span>Open</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -333,28 +212,16 @@ Example.my_fun(0.0, 1.57)
               />
             </svg>
           </a>
-          <div style="margin-top: 1em">
-            <small>
-              The link above can be configured via
-              <code>?iframe_url=YOUR_URL</code> in the browser address bar.<br />
-              Example: <code>index.html?iframe_url=http://localhost:1234</code>
-            </small>
-          </div>
         </section>
         <!-- iOS-embedded Demo Video Slide -->
         <section>
-          <h2>iOS-embedded Demo</h2>
+          <h2>We can also deploy to iOS</h2>
           <video controls width="800">
             <source src="videos/sample.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <p>
-            <small>
-              This video demonstrates the image processing demo running natively
-              on iOS.<br />
-              Replace <code>sample.mp4</code> with your own video in the
-              <code>videos/</code> folder.
-            </small>
+            <small> Nx running on-device with LiveView Native </small>
           </p>
         </section>
         <!-- Conclusion Slide -->
@@ -364,7 +231,9 @@ Example.my_fun(0.0, 1.57)
             <li>Matrices and kernels are fundamental to image processing</li>
             <li>Nx brings fast, flexible numerical computing to Elixir</li>
             <li>Image filters are just matrix operations</li>
-            <li>Live demos and native apps make it real!</li>
+            <li>
+              Interesting applications can arise from deploying Nx to the client
+            </li>
           </ul>
         </section>
         <!-- Thank You Slide -->
@@ -372,9 +241,13 @@ Example.my_fun(0.0, 1.57)
           <h2>Thank you!</h2>
           <p>
             Questions? <br />
-            <span style="font-size: 0.8em; color: #888"
-              >(Or reach out later: paulo@valente.dev)</span
-            >
+            <p style="font-size: 0.8em; color: #888">
+              Or reach out later:
+              <br />
+              X and GitHub: @polvalente
+              <br />
+              BlueSky: @polvalente.social
+            </p>
           </p>
         </section>
       </div>
